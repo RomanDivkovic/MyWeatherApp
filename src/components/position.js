@@ -31,9 +31,5 @@ export default function Position() {
     // })
   }
 
-  return (
-    <View>
-      <Text value={text}>{text}</Text>
-    </View>
-  )
+  return <View>{/* <Text value={text}>{text}</Text> */}</View>
 }

@@ -32,10 +32,11 @@ const styles = StyleSheet.create({
   viewBackground: {
     maxHeight: 50,
     backgroundColor: '#F8F9FA'
+    // alignItems: 'baseline'
   },
   buttonText: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Montserrat1',
     color: 'white',
     textAlign: 'center',
     top: 10
@@ -44,5 +45,6 @@ const styles = StyleSheet.create({
     minHeight: 50,
     borderRadius: 15,
     margin: 2
+    // alignItems: 'baseline'
   }
 })

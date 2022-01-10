@@ -9,6 +9,7 @@ LEFT TO DO IS FIX THE BACKGROUND IN ON THE APP AND ALSO IMPLIMENT FIREBASE OR SO
 export default function ListScreen(props) {
   const [myCities, setMyCities] = useState([])
   const savedCity = props.route.params
+  //   console.log(savedCity.forecast.forecastday.hour)
   // useEffect(() => {
   //   const getWeather = async () => {
   //     try {
@@ -26,10 +27,12 @@ export default function ListScreen(props) {
 
   // console.log(savedCity.location)
 
+  //   if (savedCity === undefined)
   return (
     <SafeAreaView>
       <View>
         <Text style={styles.Text}>Listscreen</Text>
+        {/* <Text>{savedCity.location.name}</Text> */}
       </View>
     </SafeAreaView>
   )

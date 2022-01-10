@@ -4,12 +4,23 @@ import { StyleSheet, Text, View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
+import { useFonts } from 'expo-font'
 
 import SearchScreen from './src/Screens/SearchScreen'
 import ListScreen from './src/Screens/ListScreen'
 
 export default function App() {
   const Tab = createBottomTabNavigator()
+
+  const [loaded] = useFonts({
+    Montserrat1: require('./src/assets/fonts/Montserrat-BoldItalic.ttf'),
+    Montserrat2: require('./src/assets/fonts/Montserrat-Regular.ttf'),
+    Montserrat3: require('./src/assets/fonts/Montserrat-SemiBoldItalic.ttf')
+  })
+
+  if (!loaded) {
+    return null
+  }
 
   return (
     <NavigationContainer>
