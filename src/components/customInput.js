@@ -1,21 +1,20 @@
-import React from 'react'
-import { StyleSheet, View, TextInput, Platform } from 'react-native'
+import React, { useState } from 'react'
+import { View, TextInput, StyleSheet } from 'react-native'
 
-const CustomInput = (props) => {
+export default function Search(props) {
+  const [cityName, setCityName] = useState('')
+
   return (
-    <View>
+    <View style={styles.input}>
       <TextInput
-        style={styles.input}
+        placeholder="Enter City Name or Zip Code"
         onChangeText={props.onChangeText}
         value={props.value}
-        placeholder="Search for a city"
         keyboardType="default"
       />
     </View>
   )
 }
-
-export default CustomInput
 
 const styles = StyleSheet.create({
   input: {
@@ -26,7 +25,7 @@ const styles = StyleSheet.create({
     borderColor: '#3b4053',
     borderWidth: 1,
     borderRadius: 8,
-    color: 'white',
+    // color: 'white',
     marginBottom: 8
   }
 })

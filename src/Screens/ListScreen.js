@@ -7,32 +7,12 @@ LEFT TO DO IS FIX THE BACKGROUND IN ON THE APP AND ALSO IMPLIMENT FIREBASE OR SO
 */
 
 export default function ListScreen(props) {
-  const [myCities, setMyCities] = useState([])
   const savedCity = props.route.params
-  //   console.log(savedCity.forecast.forecastday.hour)
-  // useEffect(() => {
-  //   const getWeather = async () => {
-  //     try {
-  //       const response = await api.get(text + '&aqi=no')
-  //       setMyCities(response.data)
-  //       console.log('Result on useEffect call in screen direcly: ', myCities)
-  //       return result
-  //     } catch (error) {
-  //       setResult(error.toString())
-  //       console.log('Error Result from api call', result)
-  //     }
-  //   }
-  //   getWeather()
-  // }, [])
 
-  // console.log(savedCity.location)
-
-  //   if (savedCity === undefined)
   return (
     <SafeAreaView>
       <View>
         <Text style={styles.Text}>Listscreen</Text>
-        {/* <Text>{savedCity.location.name}</Text> */}
       </View>
     </SafeAreaView>
   )

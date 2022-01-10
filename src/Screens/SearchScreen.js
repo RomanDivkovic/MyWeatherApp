@@ -4,30 +4,12 @@ import CustomButton from '../components/customButton'
 import CustomInput from '../components/customInput'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import api from '../Utils/api/api'
-import { useNavigation } from '@react-navigation/native'
-import Position from '../components/position'
-// import Position from '../components/position'
-/*
-LEFT TO DO IS FIX THE BACKGROUND IN ON THE APP AND ALSO IMPLIMENT FIREBASE OR SOMETHING SO USER CAN SAVE LOCATION AND IN THE LIST SCREEN CALL SAVED LOCATIONS TO LOOP THRU AND SHOWING THEM WITH NAME, TEMP AND ICON. 
 
-TO-DO: In this screen fix background and fix error messages so app dosent crash if user searches for a city that dosent exist.
-*/
-
-/**
- * This is the searchscreen where user can search for every citys weather in the world
- * @returns
- *
- */
-
-export default function SearchScreen(props) {
+export default function SearchScreen() {
   const [result, setResult] = useState([])
   const [text, onTextChange] = useState('')
   const [saveCity, setSaveCity] = useState([])
-  const navigation = useNavigation()
 
-  // Will be hard coded to Gothenburg but need to change to get users location and show weather from his location but that will come later
-  //   useEffect(() => {
-  //     const getWeather = async () => {
   //       try {
   //         const response = await api.get(text + '&aqi=no')
   //         setResult(response.data)
@@ -44,7 +26,6 @@ export default function SearchScreen(props) {
   if (result.length === 0 || result === undefined) {
     return (
       <SafeAreaView style={{ backgroundColor: '#fff', height: '100%' }}>
-        <Position />
         <ScrollView>
           <CustomInput onChangeText={onTextChange} value={text} />
           <CustomButton
@@ -66,19 +47,12 @@ export default function SearchScreen(props) {
               searchApi()
             }}
           />
-          <CustomButton
-            title="Go to ListScreen"
-            onPress={() => {
-              navigation.navigate('List')
-            }}
-          />
         </ScrollView>
       </SafeAreaView>
     )
   } else {
     return (
       <SafeAreaView style={{ backgroundColor: '#fff', height: '100%' }}>
-        <Position />
         <CustomInput onChangeText={onTextChange} value={text} />
         <View style={styles.container}>
           <Text style={textStyles.Country}>{result.location.name}</Text>
@@ -116,12 +90,11 @@ export default function SearchScreen(props) {
           <Text>Visibility: {result.current.vis_km}km</Text>
         </View>
         <CustomButton
-          style={{ alignItems: 'baseline' }}
           title="Search"
           onPress={() => {
             const searchApi = async () => {
               try {
-                const response = await api.get(text + '&aqi=yes')
+                const response = await api.get(text + '&aqi=no')
                 setResult(response.data)
                 console.log('Result on api call in btn: ', result)
                 return result
@@ -133,13 +106,13 @@ export default function SearchScreen(props) {
             searchApi()
           }}
         />
-        <CustomButton
+        {/* <CustomButton
           title="Save city "
           onPress={() => {
             setSaveCity(result)
             navigation.navigate('List', saveCity)
           }}
-        />
+        /> */}
       </SafeAreaView>
     )
   }

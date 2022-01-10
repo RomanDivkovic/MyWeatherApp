@@ -8,6 +8,7 @@ import { useFonts } from 'expo-font'
 
 import SearchScreen from './src/Screens/SearchScreen'
 import ListScreen from './src/Screens/ListScreen'
+import CurrentScreen from './src/Screens/CurrentScreen'
 
 export default function App() {
   const Tab = createBottomTabNavigator()
@@ -29,12 +30,12 @@ export default function App() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName
 
-            if (route.name === 'Home') {
-              iconName = focused
-                ? 'ios-information-circle'
-                : 'ios-information-circle-outline'
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'ios-list-box' : 'ios-list'
+            if (route.name === 'Current') {
+              iconName = focused ? 'ios-home' : 'ios-home-outline'
+            } else if (route.name === 'List') {
+              iconName = focused ? 'ios-list' : 'ios-list-outline'
+            } else if (route.name === 'Search') {
+              iconName = focused ? 'ios-search' : 'ios-search-outline'
             }
 
             // You can return any component that you like here!
@@ -44,7 +45,8 @@ export default function App() {
           tabBarInactiveTintColor: 'gray'
         })}
       >
-        <Tab.Screen name="Home" component={SearchScreen} />
+        <Tab.Screen name="Current" component={CurrentScreen} />
+        <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="List" component={ListScreen} />
       </Tab.Navigator>
     </NavigationContainer>
