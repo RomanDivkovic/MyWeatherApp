@@ -22,7 +22,7 @@ export default function CurrentScreen() {
 
     const { status } = await Location.requestForegroundPermissionsAsync()
     if (status !== 'granted') {
-      Alert.alert('Permission to access location was denied')
+      console.log('Denied..')
     }
 
     let location = await Location.getCurrentPositionAsync({
@@ -31,7 +31,7 @@ export default function CurrentScreen() {
 
     try {
       const response = await api.get(
-        `$lat=${location.coords.latitude}long=${location.coords.longitude}days=5&aqi=no&alerts=no`
+        'lat=' + location.coords.latitude + 'long=' + location.coords.longitude
       )
       setResult(response.data)
       console.log('Result on api call in btn: ', result)

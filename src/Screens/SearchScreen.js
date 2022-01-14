@@ -8,20 +8,6 @@ import api from '../Utils/api/api'
 export default function SearchScreen() {
   const [result, setResult] = useState([])
   const [text, onTextChange] = useState('')
-  const [saveCity, setSaveCity] = useState([])
-
-  //       try {
-  //         const response = await api.get(text + '&aqi=no')
-  //         setResult(response.data)
-  //         console.log('Result on useEffect call in screen direcly: ', result)
-  //         return result
-  //       } catch (error) {
-  //         setResult(error.toString())
-  //         console.log('Error Result from api call', result)
-  //       }
-  //     }
-  //     getWeather()
-  //   }, [])
 
   if (result.length === 0 || result === undefined) {
     return (
@@ -106,13 +92,6 @@ export default function SearchScreen() {
             searchApi()
           }}
         />
-        {/* <CustomButton
-          title="Save city "
-          onPress={() => {
-            setSaveCity(result)
-            navigation.navigate('List', saveCity)
-          }}
-        /> */}
       </SafeAreaView>
     )
   }
