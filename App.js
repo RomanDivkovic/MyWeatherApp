@@ -28,52 +28,6 @@ export default function App() {
     return null
   }
 
-  // const unsubscribe = auth.onAuthStateChanged((user) => {
-  //   if (user) {
-  //     return user
-  //   }
-  // })
-
-  // if (unsubscribe) {
-  //   return (
-  //     <NavigationContainer>
-  //       <Tab.Navigator
-  //         screenOptions={({ route }) => ({
-  //           tabBarIcon: ({ focused, color, size }) => {
-  //             let iconName
-
-  //             if (route.name === 'Current') {
-  //               iconName = focused ? 'ios-home' : 'ios-home-outline'
-  //             } else if (route.name === 'List') {
-  //               iconName = focused ? 'ios-list' : 'ios-list-outline'
-  //             } else if (route.name === 'Search') {
-  //               iconName = focused ? 'ios-search' : 'ios-search-outline'
-  //             }
-
-  //             // You can return any component that you like here!
-  //             return <Ionicons name={iconName} size={size} color={color} />
-  //           },
-  //           tabBarActiveTintColor: 'tomato',
-  //           tabBarInactiveTintColor: 'gray'
-  //         })}
-  //       >
-  //         <Tab.Screen name="Profile" component={ProfileScreen} />
-  //         <Tab.Screen name="Current" component={CurrentScreen} />
-  //         <Tab.Screen name="Search" component={SearchScreen} />
-  //         <Tab.Screen name="List" component={ListScreen} />
-  //       </Tab.Navigator>
-  //     </NavigationContainer>
-  //   )
-  // } else {
-  //   return (
-  //     <NavigationContainer>
-  //       <Tab.Navigator>
-  //         <Tab.Screen name="Login" component={LogInScreen} />
-  //       </Tab.Navigator>
-  //     </NavigationContainer>
-  //   )
-  // }
-
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -87,6 +41,8 @@ export default function App() {
               iconName = focused ? 'ios-list' : 'ios-list-outline'
             } else if (route.name === 'Search') {
               iconName = focused ? 'ios-search' : 'ios-search-outline'
+            } else if (route.name === 'Profile') {
+              iconName = focused ? 'ios-person' : 'ios-person-outline'
             }
 
             // You can return any component that you like here!
@@ -97,9 +53,7 @@ export default function App() {
         })}
       >
         <Tab.Screen
-          options={{
-            tabBarVisible: false
-          }}
+          options={{ tabBarStyle: { display: 'none' } }}
           name="Login"
           component={LogInScreen}
         />
