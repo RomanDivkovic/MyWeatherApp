@@ -5,7 +5,8 @@ import {
   Text,
   Image,
   ScrollView,
-  ImageBackground
+  ImageBackground,
+  Alert
 } from 'react-native'
 import CustomButton from '../components/customButton'
 import CustomInput from '../components/customInput'
@@ -18,41 +19,6 @@ export default function SearchScreen() {
   const [result, setResult] = useState([])
   const [text, onTextChange] = useState('')
   const [loaded, setLoaded] = useState(true)
-
-  const [refreshing, setRefreshing] = useState(false)
-
-  const loadWeather = async () => {
-    setRefreshing(true)
-
-    const { status } = await Location.requestForegroundPermissionsAsync()
-    if (status !== 'granted') {
-      console.log('Denied..')
-    }
-
-    let location = await Location.getCurrentPositionAsync({
-      enableHighAccuracy: true
-    })
-
-    try {
-      const response = await api.get(
-        'lat=' + location.coords.latitude + 'long=' + location.coords.longitude
-      )
-      setResult(response.data)
-      console.log('Result on api call in btn: ', result)
-    } catch (error) {
-      setResult(error.toString())
-      console.log('Error Result from api call', result)
-    }
-
-    setRefreshing(false)
-  }
-
-  useEffect(() => {
-    loadWeather()
-  }, [])
-
-  // to get forcast and not just current call this
-  //https://api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
 
   if (loaded === true) {
     return (
@@ -70,15 +36,16 @@ export default function SearchScreen() {
                 const searchApi = async () => {
                   try {
                     const response = await api.get(
-                      `weather?q=${text}&units=metric&appid=${api_key}`
+                      `forecast?q=${text}&units=metric&appid=${api_key}`
                     )
                     setResult(response.data)
                     setLoaded(false)
-                    console.log('Result on api call in btn: ', response.data)
+                    // console.log('Result on api call in btn: ', response.data)
                     return result
                   } catch (error) {
                     setResult(error.toString())
                     console.log('Error Result from api call', result)
+                    Alert(result)
                   }
                 }
                 searchApi()
@@ -100,8 +67,10 @@ export default function SearchScreen() {
             <CustomInput onChangeText={onTextChange} value={text} />
             <View style={styles.container}>
               <Text style={textStyles.Country}>
-                {result.name}, {result.sys.country}
+                {result.city.name}, {result.city.country}
               </Text>
+              <Text>{result.city.sunrise}</Text>
+              <Text>{result.city.sunset}</Text>
               <Text
                 style={{
                   fontSize: 22,
@@ -114,33 +83,40 @@ export default function SearchScreen() {
                   shadowRadius: 2
                 }}
               >
-                {result.main.temp}ºC
+                {result.list[0].main.temp}ºC
               </Text>
-              <Text style={textStyles.feelsLike}>
-                Feels like: {result.main.feels_like}ºC
+              <Text tyle={textStyles.feelsLike}>
+                {result.list[0].main.feels_like}ºC
               </Text>
-              <Text>{result.weather.description}</Text>
+
+              <Text>{result.list[0].weather[0].main}</Text>
+              <Text>{result.list[0].weather[0].description}</Text>
               <Image
                 style={styles.pic}
                 source={{
                   //http://openweathermap.org/img/w/${props.icon}.png
-                  uri: `https://openweathermap.org/img/w/${result.weather.icon}.png`
+
+                  uri: `http://openweathermap.org/img/w/${result.list[0].weather[0].icon}.png`
                   // uri: 'https:' + result.weather.icon
                 }}
               />
-              <Text>WIND SPEED: {result.wind.speed}</Text>
-              <Text>Humidity: {result.main.humidity}</Text>
+              <Text>Max: {result.list[0].main.temp_max}ºC</Text>
+              <Text>Min: {result.list[0].main.temp_min}ºC</Text>
+              <Text>Humidity: {result.list[0].main.humidity}</Text>
+              <Text>Visibility: {result.list[0].visibility}</Text>
             </View>
+
             <CustomButton
               title="Search"
               onPress={() => {
                 const searchApi = async () => {
                   try {
                     const response = await api.get(
-                      `weather?q=${text}&units=metric&appid=${api_key}`
+                      `forecast?q=${text}&units=metric&appid=${api_key}`
                     )
                     setResult(response.data)
                     console.log('Result on api call in btn: ', response.data)
+                    // console.log(result.weather)
                     return result
                   } catch (error) {
                     setResult(error.toString())

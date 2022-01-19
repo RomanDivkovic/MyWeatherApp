@@ -31,9 +31,6 @@ export default function CurrentScreen() {
       enableHighAccuracy: true
     })
 
-    // `${url}&lat=${location.coords.latitude}&lon=${location.coords.longitude}`
-    //api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
-
     try {
       const response = await api.get(
         `weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&units=metric&appid=${api_key}`
@@ -56,25 +53,6 @@ export default function CurrentScreen() {
     return (
       <SafeAreaView style={styles.loading}>
         <ActivityIndicator size="large" />
-        <CustomButton
-          title="Search"
-          onPress={() => {
-            const searchApi = async () => {
-              try {
-                const response = await api.get(
-                  `weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&units=metric&appid=${api_key}`
-                )
-                setResult(response.data)
-                console.log('Result on api call in btn: ', response.data)
-                return result
-              } catch (error) {
-                setResult(error.toString())
-                console.log('Error Result from api call', result)
-              }
-            }
-            searchApi()
-          }}
-        />
       </SafeAreaView>
     )
   }
@@ -116,32 +94,16 @@ export default function CurrentScreen() {
           <Image
             style={styles.pic}
             source={{
-              //http://openweathermap.org/img/w/${props.icon}.png
-              uri: `https://openweathermap.org/img/w/${result.weather.icon}.png`
-              // uri: 'https:' + result.weather.icon
+              uri: `https://openweathermap.org/img/w/${result.weather[0].icon}.png`
             }}
           />
           <Text>WIND SPEED: {result.wind.speed}</Text>
           <Text>Humidity: {result.main.humidity}</Text>
         </View>
         <CustomButton
-          title="Search"
+          title="Update"
           onPress={() => {
             loadWeather()
-            // const searchApi = async () => {
-            //   try {
-            //     const response = await api.get(
-            //       `weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&units=metric&appid=${api_key}`
-            //     )
-            //     setResult(response.data)
-            //     console.log('Result on api call in btn: ', response.data)
-            //     return result
-            //   } catch (error) {
-            //     setResult(error.toString())
-            //     console.log('Error Result from api call', result)
-            //   }
-            // }
-            // searchApi()
           }}
         />
       </ScrollView>
