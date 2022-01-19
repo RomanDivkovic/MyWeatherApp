@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, TextInput, StyleSheet } from 'react-native'
 
 export default function Search(props) {
-  const [cityName, setCityName] = useState('')
-
   return (
-    <View style={styles.input}>
+    <View style={styles.inputContainer}>
       <TextInput
+        style={styles.input}
         placeholder="Enter City Name or Zip Code"
         onChangeText={props.onChangeText}
         value={props.value}
@@ -18,14 +17,16 @@ export default function Search(props) {
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
-    backgroundColor: 'lightgrey',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderColor: '#3b4053',
+    // margin: 5,
+    // padding: 10,
+    minWidth: 200,
+    alignSelf: 'center',
     borderWidth: 1,
     borderRadius: 8,
-    // color: 'white',
-    marginBottom: 8
+    borderColor: '#3b4053',
+    backgroundColor: 'whitesmoke',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 10
   }
 })

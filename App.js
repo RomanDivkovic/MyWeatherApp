@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useEffect } from 'react'
 
 import { NavigationContainer } from '@react-navigation/native'
@@ -12,8 +11,6 @@ import ListScreen from './src/Screens/ListScreen'
 import CurrentScreen from './src/Screens/CurrentScreen'
 import LogInScreen from './src/Screens/LogInScreen'
 import ProfileScreen from './src/Screens/ProfileScreen'
-
-import { auth } from './firebase'
 
 export default function App() {
   const Tab = createBottomTabNavigator()

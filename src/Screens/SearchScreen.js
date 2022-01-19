@@ -1,98 +1,158 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, Text, Image, ScrollView } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  ScrollView,
+  ImageBackground
+} from 'react-native'
 import CustomButton from '../components/customButton'
 import CustomInput from '../components/customInput'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import api from '../Utils/api/api'
+import api_key from '../components/apiKey'
+import backgroundPhoto from '../assets/photo/sunrise.jpg'
 
 export default function SearchScreen() {
   const [result, setResult] = useState([])
   const [text, onTextChange] = useState('')
+  const [loaded, setLoaded] = useState(true)
 
-  if (result.length === 0 || result === undefined) {
+  const [refreshing, setRefreshing] = useState(false)
+
+  const loadWeather = async () => {
+    setRefreshing(true)
+
+    const { status } = await Location.requestForegroundPermissionsAsync()
+    if (status !== 'granted') {
+      console.log('Denied..')
+    }
+
+    let location = await Location.getCurrentPositionAsync({
+      enableHighAccuracy: true
+    })
+
+    try {
+      const response = await api.get(
+        'lat=' + location.coords.latitude + 'long=' + location.coords.longitude
+      )
+      setResult(response.data)
+      console.log('Result on api call in btn: ', result)
+    } catch (error) {
+      setResult(error.toString())
+      console.log('Error Result from api call', result)
+    }
+
+    setRefreshing(false)
+  }
+
+  useEffect(() => {
+    loadWeather()
+  }, [])
+
+  // to get forcast and not just current call this
+  //https://api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
+
+  if (loaded === true) {
     return (
-      <SafeAreaView style={{ backgroundColor: '#fff', height: '100%' }}>
-        <ScrollView>
-          <CustomInput onChangeText={onTextChange} value={text} />
-          <CustomButton
-            title="Search"
-            onPress={() => {
-              const searchApi = async () => {
-                try {
-                  const response = await api.get(
-                    text + '&days=5&aqi=no&alerts=no'
-                  )
-                  setResult(response.data)
-                  console.log('Result on api call in btn: ', result)
-                  return result
-                } catch (error) {
-                  setResult(error.toString())
-                  console.log('Error Result from api call', result)
+      <ImageBackground
+        source={backgroundPhoto}
+        resizeMode="cover"
+        style={styles.image}
+      >
+        <SafeAreaView style={{ backgroundColor: '#fff', height: '100%' }}>
+          <ScrollView>
+            <CustomInput onChangeText={onTextChange} value={text} />
+            <CustomButton
+              title="Search"
+              onPress={() => {
+                const searchApi = async () => {
+                  try {
+                    const response = await api.get(
+                      `weather?q=${text}&units=metric&appid=${api_key}`
+                    )
+                    setResult(response.data)
+                    setLoaded(false)
+                    console.log('Result on api call in btn: ', response.data)
+                    return result
+                  } catch (error) {
+                    setResult(error.toString())
+                    console.log('Error Result from api call', result)
+                  }
                 }
-              }
-              searchApi()
-            }}
-          />
-        </ScrollView>
-      </SafeAreaView>
+                searchApi()
+              }}
+            />
+          </ScrollView>
+        </SafeAreaView>
+      </ImageBackground>
     )
   } else {
     return (
-      <SafeAreaView style={{ backgroundColor: '#fff', height: '100%' }}>
-        <CustomInput onChangeText={onTextChange} value={text} />
-        <View style={styles.container}>
-          <Text style={textStyles.Country}>{result.location.name}</Text>
-          <Text style={textStyles.state}>
-            {result.location.region} in {''}
-            {result.location.country}
-          </Text>
-
-          <Text
-            style={{
-              fontSize: 22,
-              fontWeight: '700',
-              shadowOffset: {
-                width: 5,
-                height: 5
-              },
-              shadowOpacity: 0.4,
-              shadowRadius: 2
-            }}
-          >
-            {result.current.temp_c}ºC
-          </Text>
-          <Text style={textStyles.feelsLike}>
-            Feels like: {result.current.feelslike_c}ºC
-          </Text>
-          <Text>{result.current.condition.text}</Text>
-          <Image
-            style={styles.pic}
-            source={{
-              uri: 'https:' + result.current.condition.icon
-            }}
-          />
-          <Text>WIND SPEED: {result.current.wind_mph}mph</Text>
-          <Text>Humidity: {result.current.humidity}</Text>
-          <Text>Visibility: {result.current.vis_km}km</Text>
-        </View>
-        <CustomButton
-          title="Search"
-          onPress={() => {
-            const searchApi = async () => {
-              try {
-                const response = await api.get(text + '&aqi=no')
-                setResult(response.data)
-                console.log('Result on api call in btn: ', result)
-                return result
-              } catch (error) {
-                setResult(error.toString())
-                console.log('Error Result from api call', result)
-              }
-            }
-            searchApi()
-          }}
-        />
-      </SafeAreaView>
+      <ImageBackground
+        source={backgroundPhoto}
+        resizeMode="cover"
+        style={styles.image}
+      >
+        <SafeAreaView style={{ backgroundColor: '#fff', height: '100%' }}>
+          <ScrollView>
+            <CustomInput onChangeText={onTextChange} value={text} />
+            <View style={styles.container}>
+              <Text style={textStyles.Country}>
+                {result.name}, {result.sys.country}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontWeight: '700',
+                  shadowOffset: {
+                    width: 5,
+                    height: 5
+                  },
+                  shadowOpacity: 0.4,
+                  shadowRadius: 2
+                }}
+              >
+                {result.main.temp}ºC
+              </Text>
+              <Text style={textStyles.feelsLike}>
+                Feels like: {result.main.feels_like}ºC
+              </Text>
+              <Text>{result.weather.description}</Text>
+              <Image
+                style={styles.pic}
+                source={{
+                  //http://openweathermap.org/img/w/${props.icon}.png
+                  uri: `https://openweathermap.org/img/w/${result.weather.icon}.png`
+                  // uri: 'https:' + result.weather.icon
+                }}
+              />
+              <Text>WIND SPEED: {result.wind.speed}</Text>
+              <Text>Humidity: {result.main.humidity}</Text>
+            </View>
+            <CustomButton
+              title="Search"
+              onPress={() => {
+                const searchApi = async () => {
+                  try {
+                    const response = await api.get(
+                      `weather?q=${text}&units=metric&appid=${api_key}`
+                    )
+                    setResult(response.data)
+                    console.log('Result on api call in btn: ', response.data)
+                    return result
+                  } catch (error) {
+                    setResult(error.toString())
+                    console.log('Error Result from api call', result)
+                  }
+                }
+                searchApi()
+              }}
+            />
+          </ScrollView>
+        </SafeAreaView>
+      </ImageBackground>
     )
   }
 }
@@ -100,7 +160,8 @@ export default function SearchScreen() {
 // Style for my components
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex: 1,
+    // padding: 20,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
@@ -108,31 +169,10 @@ const styles = StyleSheet.create({
   pic: {
     width: 150,
     height: 150
-    // margin: 10
   },
-  input: {
-    width: '80%',
-    alignSelf: 'center',
-    height: 50,
-    padding: 10,
-    marginTop: 20,
-    marginBottom: 10,
-    backgroundColor: '#e8e8e8'
-  },
-  viewBackground: {
-    maxHeight: 50,
-    backgroundColor: '#F8F9FA'
-  },
-  buttonText: {
-    fontSize: 24,
-    color: 'white',
-    textAlign: 'center',
-    top: 10
-  },
-  viewButton: {
-    minHeight: 50,
-    borderRadius: 15,
-    margin: 2
+  image: {
+    flex: 1,
+    justifyContent: 'center'
   }
 })
 

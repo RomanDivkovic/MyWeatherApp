@@ -1,11 +1,5 @@
 import React from 'react'
-import {
-  View,
-  StyleSheet,
-  Text,
-  Pressable,
-  GestureResponderEvent
-} from 'react-native'
+import { View, StyleSheet, Text, Pressable } from 'react-native'
 
 /* My custom button created to use in application where its needed, button has design here and an props to send to other screens and they can add title and onPress */
 
@@ -31,8 +25,8 @@ export default function CustomButton(props) {
 const styles = StyleSheet.create({
   viewBackground: {
     maxHeight: 50,
-    backgroundColor: '#F8F9FA'
-    // alignItems: 'baseline'
+    margin: 5
+    // backgroundColor: '#F8F9FA'
   },
   buttonText: {
     fontSize: 24,
@@ -45,6 +39,5 @@ const styles = StyleSheet.create({
     minHeight: 50,
     borderRadius: 15,
     margin: 2
-    // alignItems: 'baseline'
   }
 })
