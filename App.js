@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
-// import { createStackNavigator } from '@react-navigation/stack'
 
 import SearchScreen from './src/Screens/SearchScreen'
 import ListScreen from './src/Screens/ListScreen'
@@ -62,62 +61,16 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          options={{ tabBarStyle: { display: 'none' }, headerShown: false }}
-          name="Profile"
-          component={HomeTabs}
-        />
-        <Tab.Screen
           options={{ tabBarStyle: { display: 'none' } }}
           name="Login"
           component={LogInScreen}
         />
+        <Tab.Screen
+          options={{ tabBarStyle: { display: 'none' }, headerShown: false }}
+          name="Profile"
+          component={HomeTabs}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )
-
-  // return (
-  //   <NavigationContainer>
-  //     <Tab.Navigator
-  //       screenOptions={({ route }) => ({
-  //         tabBarIcon: ({ focused, color, size }) => {
-  //           let iconName
-
-  //           if (route.name === 'Current') {
-  //             iconName = focused ? 'ios-home' : 'ios-home-outline'
-  //           } else if (route.name === 'List') {
-  //             iconName = focused ? 'ios-list' : 'ios-list-outline'
-  //           } else if (route.name === 'Search') {
-  //             iconName = focused ? 'ios-search' : 'ios-search-outline'
-  //           } else if (route.name === 'Profile') {
-  //             iconName = focused ? 'ios-person' : 'ios-person-outline'
-  //           }
-
-  //           // You can return any component that you like here!
-  //           return <Ionicons name={iconName} size={size} color={color} />
-  //         },
-  //         tabBarActiveTintColor: 'tomato',
-  //         tabBarInactiveTintColor: 'gray'
-  //       })}
-  //     >
-  //       <Tab.Screen
-  //         options={{ tabBarStyle: { display: 'none' } }}
-  //         name="Login"
-  //         component={LogInScreen}
-  //       />
-  //       <Tab.Screen name="Profile" component={ProfileScreen} />
-  //       <Tab.Screen name="Current" component={CurrentScreen} />
-  //       <Tab.Screen name="Search" component={SearchScreen} />
-  //       <Tab.Screen name="List" component={ListScreen} />
-  //     </Tab.Navigator>
-  //   </NavigationContainer>
-  // )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-})

@@ -13,7 +13,7 @@ export default function LoginScree() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.navigate('Profile')
+        navigation.navigate('Profile', user.email)
       }
     })
 
