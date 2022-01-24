@@ -6,6 +6,7 @@ import {
   Image,
   ActivityIndicator,
   ScrollView,
+  Alert,
   RefreshControl
 } from 'react-native'
 import * as Location from 'expo-location'
@@ -13,11 +14,7 @@ import api from '../Utils/api/api'
 import api_key from '../components/apiKey'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '../components/customButton'
-
-/*
-Need to merge this screen with search screen, this screen just looks at current location and is unnecessary.
-Can do that in searchscreen when navigating there...
-*/
+// import AsyncStorage from '@react-native-community/async-storage'
 
 export default function CurrentScreen() {
   const [result, setResult] = useState(null)
@@ -27,6 +24,9 @@ export default function CurrentScreen() {
     setRefreshing(true)
 
     const { status } = await Location.requestForegroundPermissionsAsync()
+    if (status !== 'granted') {
+      console.log('Denied..')
+    }
 
     let location = await Location.getCurrentPositionAsync({
       enableHighAccuracy: true
@@ -37,9 +37,10 @@ export default function CurrentScreen() {
         `weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&units=metric&appid=${api_key}`
       )
       setResult(response.data)
+      console.log('Result on api call: ', result)
     } catch (error) {
       setResult(error.toString())
-      console.log('Error from api call: ', result)
+      console.log('Error Result from api call', result)
     }
 
     setRefreshing(false)

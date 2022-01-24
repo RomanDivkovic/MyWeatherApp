@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, Text, Image, ScrollView, Alert } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  ScrollView,
+  Alert,
+  FlatList,
+  SectionList
+} from 'react-native'
 import CustomButton from '../components/customButton'
 import CustomInput from '../components/customInput'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -33,7 +42,7 @@ export default function SearchScreen() {
                   )
                   setResult(response.data)
                   setLoaded(false)
-                  // console.log('Result on api call in btn: ', response.data)
+
                   return result
                 } catch (error) {
                   setResult(error.toString())
@@ -48,6 +57,19 @@ export default function SearchScreen() {
       </SafeAreaView>
     )
   } else {
+    // const ListItem = ({ item }) => {
+    //   return (
+    //     <View style={styles.item}>
+    //       <Image
+    //         style={styles.pic}
+    //         source={{
+    //           uri: `http://openweathermap.org/img/w/${result.list[0].weather[0].icon}.png`
+    //         }}
+    //       />
+    //       <Text>{item.main.temp}ºC</Text>
+    //     </View>
+    //   )
+    // }
     return (
       <SafeAreaView style={{ backgroundColor: '#fff', height: '100%' }}>
         <ScrollView>
@@ -92,8 +114,37 @@ export default function SearchScreen() {
             <Text style={styles.min}>
               Min: {result.list[0].main.temp_min}ºC
             </Text>
-            <Text>Humidity: {result.list[0].main.humidity}</Text>
-            <Text>Visibility: {result.list[0].visibility}</Text>
+            {/* <Text>Humidity: {result.list[0].main.humidity}</Text>
+            <Text>Visibility: {result.list[0].visibility}</Text> */}
+          </View>
+
+          <View style={styles.viewList}>
+            <View style={styles.eachList}>
+              <FlatList
+                data={result.list}
+                horizontal
+                renderItem={({ item }) => (
+                  <View style={styles.item}>
+                    <Text>{item.dt_txt}</Text>
+                    <Image
+                      style={styles.pic}
+                      source={{
+                        uri: `http://openweathermap.org/img/w/${item.weather[0].icon}.png`
+                      }}
+                    />
+                    <Text>{item.main.temp}ºC</Text>
+                    <Text>{item.main.feels_like}ºC</Text>
+                    <Text>Minaml temp {item.main.temp_min}ºC</Text>
+                    <Text>
+                      Maximum temp:
+                      {item.main.temp_max}
+                      ºC
+                    </Text>
+                  </View>
+                )}
+                // keyExtractor={(weather) => weather.city.id.toString()}
+              />
+            </View>
           </View>
 
           <CustomButton
@@ -105,8 +156,8 @@ export default function SearchScreen() {
                     `forecast?q=${text}&units=metric&appid=${api_key}`
                   )
                   setResult(response.data)
-                  console.log('Result on api call in btn: ', response.data)
-                  // console.log(result.weather)
+                  console.log('forecast log from btn: ', response.data)
+                  console.log(result.list.length, 'result list length')
                   return result
                 } catch (error) {
                   setResult(error.toString())
@@ -138,6 +189,15 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     justifyContent: 'center'
+  },
+  viewList: {
+    backgroundColor: 'grey',
+    alignItems: 'center',
+    padding: 20
+  },
+  eachList: {
+    flex: 1,
+    margin: 10
   }
 })
 
