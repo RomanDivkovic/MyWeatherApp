@@ -3,7 +3,6 @@ import { KeyboardAvoidingView, StyleSheet, TextInput, View } from 'react-native'
 import { auth } from '../../firebase'
 import { useNavigation } from '@react-navigation/native'
 import CustomButton from '../components/customButton'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function LoginScree() {
   const [email, setEmail] = useState('')

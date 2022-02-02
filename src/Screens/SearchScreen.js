@@ -5,15 +5,15 @@ import {
   Text,
   Image,
   ScrollView,
-  Alert,
   FlatList,
   ImageBackground
 } from 'react-native'
 import CustomButton from '../components/customButton'
 import CustomInput from '../components/customInput'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import api from '../Utils/api/api'
 import api_key from '../components/apiKey'
+import * as firebase from 'firebase'
+import { auth } from '../../firebase'
 
 export default function SearchScreen({ navigation }) {
   const [result, setResult] = useState([])
@@ -24,29 +24,31 @@ export default function SearchScreen({ navigation }) {
     uri: 'https://cdn.pixabay.com/photo/2015/10/30/20/13/sunrise-1014712_960_720.jpg'
   }
 
-  if (loaded === true || result.city.name === undefined) {
+  if (loaded === true) {
     return (
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <CustomInput onChangeText={onTextChange} value={text} />
-        <CustomButton
-          title="Search"
-          onPress={() => {
-            const searchApi = async () => {
-              try {
-                const response = await api.get(
-                  `forecast?q=${text}&units=metric&appid=${api_key}`
-                )
-                setResult(response.data)
-                setLoaded(false)
-              } catch (error) {
-                setResult(error.toString())
-                console.log('Error Result from api call', result)
-                alert(result)
+        <View style={{ flex: 1, alignContent: 'center', padding: 10 }}>
+          <CustomInput onChangeText={onTextChange} value={text} />
+          <CustomButton
+            title="Search"
+            onPress={() => {
+              const searchApi = async () => {
+                try {
+                  const response = await api.get(
+                    `forecast?q=${text}&units=metric&appid=${api_key}`
+                  )
+                  setResult(response.data)
+                  setLoaded(false)
+                } catch (error) {
+                  setResult(error.toString())
+                  console.log('Error Result from api call', result)
+                  alert(result)
+                }
               }
-            }
-            searchApi()
-          }}
-        />
+              searchApi()
+            }}
+          />
+        </View>
       </ImageBackground>
     )
   } else {
@@ -75,12 +77,9 @@ export default function SearchScreen({ navigation }) {
             >
               {result.list[0].main.temp}ºC
             </Text>
+            <Text>Feels like</Text>
             <Text style={textStyles.feelsLike}>
               {result.list[0].main.feels_like}ºC
-            </Text>
-
-            <Text style={textStyles.main}>
-              {result.list[0].weather[0].main}
             </Text>
             <Text style={textStyles.description}>
               {result.list[0].weather[0].description}
@@ -105,7 +104,8 @@ export default function SearchScreen({ navigation }) {
             </Text>
           </View>
 
-          <View style={styles.eachList}>
+          {/* Forecast data from weather search */}
+          <View>
             <FlatList
               data={result.list}
               horizontal
@@ -184,25 +184,36 @@ export default function SearchScreen({ navigation }) {
           <CustomButton
             title="Save place"
             onPress={() => {
-              alert('Need to save to db')
+              setDbData(result.city.name)
             }}
           />
         </ScrollView>
       </ImageBackground>
     )
   }
+
+  function setDbData(text) {
+    /**
+     *
+     * Need to fix so when user presses he saves another city and not write over the one that already exists
+     *
+     */
+    firebase
+      .database()
+      .ref('users/' + auth.currentUser?.uid + '/' + result.city.name)
+      .set({
+        city: text
+      })
+  }
+
   function getWeather(text) {
-    // useEffect(() => {})
-    // if (text === undefined) {
-    //   alert(result)
-    // }
     const searchApi = async () => {
       try {
         const response = await api.get(
           `forecast?q=${text}&units=metric&appid=${api_key}`
         )
         setResult(response.data)
-        // console.log('forecast log from btn: ', response.data)
+        console.log('forecast log from btn: ', response.data)
         // console.log(result.list.length, 'result list length')
       } catch (error) {
         setResult(error.toString())
@@ -222,28 +233,26 @@ const styles = StyleSheet.create({
   },
   pic: {
     width: 150,
-    height: 150
+    height: 150,
+    shadowOffset: {
+      width: 10,
+      height: 2
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 2
   },
   image: {
     flex: 1,
     justifyContent: 'center'
   },
-  // viewList: {
-  //   alignItems: 'center',
-  //   padding: 20
-  // },
-  eachList: {
-    margin: 2,
-    flex: 1
-  },
   item: {
     margin: 10,
     flex: 0.9,
     borderWidth: 2.5,
-    borderColor: 'lightgrey',
+    borderColor: '#fff',
     shadowOffset: {
-      width: 5,
-      height: 5
+      width: 8,
+      height: 8
     },
     shadowOpacity: 0.8,
     shadowRadius: 2
@@ -290,7 +299,13 @@ const textStyles = StyleSheet.create({
     color: 'white',
     margin: 10,
     fontSize: 20,
-    fontFamily: 'Montserrat1'
+    fontFamily: 'Montserrat1',
+    shadowOffset: {
+      width: 6,
+      height: 6
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 2
   },
   main: {
     color: 'white',
@@ -304,14 +319,32 @@ const textStyles = StyleSheet.create({
   },
   max: {
     color: '#fff',
-    fontFamily: 'Montserrat1'
+    fontFamily: 'Montserrat1',
+    shadowOffset: {
+      width: 5,
+      height: 5
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 2
   },
   humidity: {
     color: '#fff',
-    fontFamily: 'Montserrat1'
+    fontFamily: 'Montserrat1',
+    shadowOffset: {
+      width: 5,
+      height: 5
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 2
   },
   visibility: {
     color: '#fff',
-    fontFamily: 'Montserrat1'
+    fontFamily: 'Montserrat1',
+    shadowOffset: {
+      width: 5,
+      height: 5
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 2
   }
 })

@@ -1,5 +1,3 @@
-import { StyleSheet } from 'react-native'
-
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
@@ -42,10 +40,9 @@ export default function App() {
               iconName = focused ? 'ios-person' : 'ios-person-outline'
             }
 
-            // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />
           },
-          tabBarActiveTintColor: 'tomato',
+          tabBarActiveTintColor: 'purple',
           tabBarInactiveTintColor: 'gray'
         })}
       >

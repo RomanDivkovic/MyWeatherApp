@@ -6,7 +6,7 @@ export default function Search(props) {
     <View style={styles.inputContainer}>
       <TextInput
         style={styles.input}
-        placeholder="Enter City Name or Zip Code"
+        placeholder="Enter City Name"
         onChangeText={props.onChangeText}
         value={props.value}
         keyboardType="default"
@@ -17,8 +17,6 @@ export default function Search(props) {
 
 const styles = StyleSheet.create({
   input: {
-    // margin: 5,
-    // padding: 10,
     minWidth: 200,
     alignSelf: 'center',
     borderWidth: 1,
