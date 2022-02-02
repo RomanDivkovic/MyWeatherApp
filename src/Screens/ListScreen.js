@@ -5,12 +5,12 @@ import * as firebase from 'firebase'
 import { auth } from '../../firebase'
 
 /*
-LEFT TO DO IS FIX THE BACKGROUND IN ON THE APP AND ALSO IMPLIMENT FIREBASE OR SOMETHING SO USER CAN SAVE LOCATION AND IN THE LIST SCREEN CALL SAVED LOCATIONS TO LOOP THRU AND SHOWING THEM WITH NAME, TEMP AND ICON
+Now need to get that city and show weather forcast for each city here in a horizontal flatlist
 */
 
 export default function ListScreen(props) {
-  // const savedCity = props.route.params
-  const [dbCity, setDbCity] = useState('')
+  const savedCity = props.route.params
+  const [dbCity, setDbCity] = useState([])
   const image = {
     uri: 'https://cdn.pixabay.com/photo/2015/10/30/20/13/sunrise-1014712_960_720.jpg'
   }
@@ -32,8 +32,8 @@ export default function ListScreen(props) {
     .then((snapshot) => {
       if (snapshot.exists()) {
         console.log(snapshot.val())
-        setDbCity(snapshot.val().Partille.city)
-        console.log(dbCity)
+        setDbCity(snapshot.val())
+        // console.log(dbCity)
       } else {
         console.log('No data available')
       }
@@ -42,39 +42,18 @@ export default function ListScreen(props) {
       console.error(error)
     })
 
-  // var starCountRef = firebase
-  //   .database()
-  //   .ref('users/' + auth.currentUser?.uid + '/' + result.city.name)
-  // starCountRef.on('value', (snapshot) => {
-  //   const data = snapshot.val()
-  //   updateStarCount(postElement, data)
-  // })
-
-  // const dbRef = firebase.database().ref()
-  // dbRef
-  //   .child('user')
-  //   .child(userId)
-  //   .get()
-  //   .then((snapshot) => {
-  //     if (snapshot.exists()) {
-  //       console.log(snapshot.val())
-  //     } else {
-  //       console.log('No data available')
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error(error)
-  //   })
-
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <Text style={styles.text}>{dbCity}</Text>
-        {/* <Text style={styles.text}>{dbCity}</Text> */}
+        <FlatList
+          data={dbCity.cities}
+          renderItem={({ item }) => (
+            <View>
+              <Text style={styles.text}>{item.city}</Text>
+            </View>
+          )}
+        />
       </ImageBackground>
-      {/* <View>
-        <Text style={styles.Text}>Listscreen</Text>
-      </View> */}
     </SafeAreaView>
   )
 }

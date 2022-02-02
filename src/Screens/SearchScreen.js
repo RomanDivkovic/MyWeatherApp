@@ -19,6 +19,7 @@ export default function SearchScreen({ navigation }) {
   const [result, setResult] = useState([])
   const [text, onTextChange] = useState('')
   const [loaded, setLoaded] = useState(true)
+  const [number, setNumber] = useState(0)
 
   const image = {
     uri: 'https://cdn.pixabay.com/photo/2015/10/30/20/13/sunrise-1014712_960_720.jpg'
@@ -197,10 +198,14 @@ export default function SearchScreen({ navigation }) {
      *
      * Need to fix so when user presses he saves another city and not write over the one that already exists
      *
+     * Use this so it dont write over data
+     * + result.city.name)
+     * also use useeffect instead of adding a number each time
      */
+    setNumber(number + 1)
     firebase
       .database()
-      .ref('users/' + auth.currentUser?.uid + '/' + result.city.name)
+      .ref('users/' + auth.currentUser?.uid + '/cities' + '/' + number)
       .set({
         city: text
       })
