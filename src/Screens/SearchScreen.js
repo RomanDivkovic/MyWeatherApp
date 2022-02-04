@@ -14,12 +14,13 @@ import api from '../Utils/api/api'
 import api_key from '../components/apiKey'
 import * as firebase from 'firebase'
 import { auth } from '../../firebase'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function SearchScreen({ navigation }) {
   const [result, setResult] = useState([])
   const [text, onTextChange] = useState('')
   const [loaded, setLoaded] = useState(true)
-  const [number, setNumber] = useState(0)
+  const [number, setNumber] = useState([])
 
   const image = {
     uri: 'https://cdn.pixabay.com/photo/2015/10/30/20/13/sunrise-1014712_960_720.jpg'
@@ -28,7 +29,7 @@ export default function SearchScreen({ navigation }) {
   if (loaded === true) {
     return (
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <View style={{ flex: 1, alignContent: 'center', padding: 10 }}>
+        <SafeAreaView style={{ flex: 1, alignContent: 'center', padding: 10 }}>
           <CustomInput onChangeText={onTextChange} value={text} />
           <CustomButton
             title="Search"
@@ -49,7 +50,7 @@ export default function SearchScreen({ navigation }) {
               searchApi()
             }}
           />
-        </View>
+        </SafeAreaView>
       </ImageBackground>
     )
   } else {
@@ -197,15 +198,33 @@ export default function SearchScreen({ navigation }) {
     /**
      *
      * Need to fix so when user presses he saves another city and not write over the one that already exists
+     * when restarting the app
      *
-     * Use this so it dont write over data
-     * + result.city.name)
      * also use useeffect instead of adding a number each time
      */
-    setNumber(number + 1)
+    const dbRef = firebase.database().ref()
+    dbRef
+      .child('users')
+      .child(auth.currentUser?.uid)
+      .child('cities')
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setNumber(snapshot.val())
+        } else {
+          console.log('No data available')
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+    // useEffect({
+    //   number
+    // })
+
     firebase
       .database()
-      .ref('users/' + auth.currentUser?.uid + '/cities' + '/' + number)
+      .ref('users/' + auth.currentUser?.uid + '/cities' + '/' + number.length)
       .set({
         city: text
       })

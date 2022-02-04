@@ -17,10 +17,15 @@ export default function ProfileScreen(props) {
       .catch((error) => alert(error.message))
   }
 
+  function removeAccount() {
+    alert('Need to delete account')
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <Text style={Styles.email}>Email: {auth.currentUser?.email}</Text>
       <CustomButton title="Sign out" onPress={handleSignOut} />
+      <CustomButton title="Delete account" onPress={removeAccount} />
     </View>
   )
 }
