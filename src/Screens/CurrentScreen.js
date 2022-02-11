@@ -64,55 +64,62 @@ export default function CurrentScreen() {
 
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-      <ScrollView
-        style={{ flex: 1, alignSelf: 'center' }}
-        refreshControl={
-          <RefreshControl
-            onRefresh={() => {
+      <SafeAreaView
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          backgroundColor: 'rgba(0,0,0,0.5)'
+        }}
+      >
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              onRefresh={() => {
+                loadWeather()
+              }}
+              refreshing={refreshing}
+            />
+          }
+        >
+          <View style={styles.container}>
+            <Text style={textStyles.Country}>
+              {result.name}, {result.sys.country}
+            </Text>
+            <Text
+              style={{
+                fontSize: 22,
+                fontWeight: '700',
+                shadowOffset: {
+                  width: 5,
+                  height: 5
+                },
+                shadowOpacity: 0.4,
+                shadowRadius: 2
+              }}
+            >
+              {result.main.temp}ºC
+            </Text>
+            <Text style={textStyles.feelsLike}>
+              Feels like: {result.main.feels_like}ºC
+            </Text>
+            <Text>{result.weather.description}</Text>
+            <Image
+              style={styles.pic}
+              source={{
+                uri: `https://openweathermap.org/img/w/${result.weather[0].icon}.png`
+              }}
+            />
+            <Text>WIND SPEED: {result.wind.speed}</Text>
+            <Text>Humidity: {result.main.humidity}</Text>
+          </View>
+          <CustomButton
+            title="Update"
+            onPress={() => {
               loadWeather()
             }}
-            refreshing={refreshing}
           />
-        }
-      >
-        <View style={styles.container}>
-          <Text style={textStyles.Country}>
-            {result.name}, {result.sys.country}
-          </Text>
-          <Text
-            style={{
-              fontSize: 22,
-              fontWeight: '700',
-              shadowOffset: {
-                width: 5,
-                height: 5
-              },
-              shadowOpacity: 0.4,
-              shadowRadius: 2
-            }}
-          >
-            {result.main.temp}ºC
-          </Text>
-          <Text style={textStyles.feelsLike}>
-            Feels like: {result.main.feels_like}ºC
-          </Text>
-          <Text>{result.weather.description}</Text>
-          <Image
-            style={styles.pic}
-            source={{
-              uri: `https://openweathermap.org/img/w/${result.weather[0].icon}.png`
-            }}
-          />
-          <Text>WIND SPEED: {result.wind.speed}</Text>
-          <Text>Humidity: {result.main.humidity}</Text>
-        </View>
-        <CustomButton
-          title="Update"
-          onPress={() => {
-            loadWeather()
-          }}
-        />
-      </ScrollView>
+        </ScrollView>
+      </SafeAreaView>
     </ImageBackground>
   )
 }
