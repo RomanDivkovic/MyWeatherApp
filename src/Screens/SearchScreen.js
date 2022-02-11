@@ -26,10 +26,34 @@ export default function SearchScreen({ navigation }) {
     uri: 'https://cdn.pixabay.com/photo/2015/10/30/20/13/sunrise-1014712_960_720.jpg'
   }
 
+  const dbRef = firebase.database().ref()
+  dbRef
+    .child('users')
+    .child(auth.currentUser?.uid)
+    .child('cities')
+    .get()
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        setNumber(snapshot.val())
+      } else {
+        console.log('No data available')
+      }
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+
   if (loaded === true) {
     return (
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <SafeAreaView style={{ flex: 1, alignContent: 'center', padding: 10 }}>
+        <SafeAreaView
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            alignContent: 'center',
+            padding: 10
+          }}
+        >
           <CustomInput onChangeText={onTextChange} value={text} />
           <CustomButton
             title="Search"
@@ -56,7 +80,7 @@ export default function SearchScreen({ navigation }) {
   } else {
     return (
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <ScrollView>
+        <ScrollView style={styles.scroll}>
           <CustomInput onChangeText={onTextChange} value={text} />
           <View style={styles.container}>
             <Text style={textStyles.Country}>
@@ -186,7 +210,7 @@ export default function SearchScreen({ navigation }) {
           <CustomButton
             title="Save place"
             onPress={() => {
-              setDbData(result.city.name)
+              setDbData(result)
             }}
           />
         </ScrollView>
@@ -226,7 +250,10 @@ export default function SearchScreen({ navigation }) {
       .database()
       .ref('users/' + auth.currentUser?.uid + '/cities' + '/' + number.length)
       .set({
-        city: text
+        city: text.city.name,
+        temp: text.list[0].main.temp,
+        icon: result.list[0].weather[0].icon,
+        description: result.list[0].weather[0].description
       })
   }
 
@@ -250,6 +277,10 @@ export default function SearchScreen({ navigation }) {
 
 // Style for my components
 const styles = StyleSheet.create({
+  scroll: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
   container: {
     flex: 1,
     alignItems: 'center',
