@@ -6,8 +6,8 @@ import {
   Image,
   ActivityIndicator,
   ScrollView,
-  Alert,
-  RefreshControl
+  RefreshControl,
+  ImageBackground
 } from 'react-native'
 import * as Location from 'expo-location'
 import api from '../Utils/api/api'
@@ -19,6 +19,10 @@ import CustomButton from '../components/customButton'
 export default function CurrentScreen() {
   const [result, setResult] = useState(null)
   const [refreshing, setRefreshing] = useState(false)
+
+  const image = {
+    uri: 'https://cdn.pixabay.com/photo/2015/10/30/20/13/sunrise-1014712_960_720.jpg'
+  }
 
   const loadWeather = async () => {
     setRefreshing(true)
@@ -59,8 +63,9 @@ export default function CurrentScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
       <ScrollView
+        style={{ flex: 1, alignSelf: 'center' }}
         refreshControl={
           <RefreshControl
             onRefresh={() => {
@@ -108,7 +113,7 @@ export default function CurrentScreen() {
           }}
         />
       </ScrollView>
-    </SafeAreaView>
+    </ImageBackground>
   )
 }
 
@@ -146,14 +151,8 @@ const textStyles = StyleSheet.create({
     shadowRadius: 2
   }
 })
-
 // Style for my components
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFBF6',
-    alignItems: 'center'
-  },
   pic: {
     width: 150,
     height: 150
@@ -171,10 +170,13 @@ const styles = StyleSheet.create({
     maxHeight: 50,
     backgroundColor: '#F8F9FA'
   },
-
   loading: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center'
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center'
   }
 })
