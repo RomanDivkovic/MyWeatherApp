@@ -87,6 +87,8 @@ export default function CurrentScreen() {
             </Text>
             <Text
               style={{
+                textAlign: 'center',
+                color: 'white',
                 fontSize: 22,
                 fontWeight: '700',
                 shadowOffset: {
@@ -109,8 +111,12 @@ export default function CurrentScreen() {
                 uri: `https://openweathermap.org/img/w/${result.weather[0].icon}.png`
               }}
             />
-            <Text>WIND SPEED: {result.wind.speed}</Text>
-            <Text>Humidity: {result.main.humidity}</Text>
+            <Text style={{ color: 'white' }}>
+              WIND SPEED: {result.wind.speed}
+            </Text>
+            <Text style={{ color: 'white' }}>
+              Humidity: {result.main.humidity}
+            </Text>
           </View>
           <CustomButton
             title="Update"
@@ -126,6 +132,7 @@ export default function CurrentScreen() {
 
 const textStyles = StyleSheet.create({
   Country: {
+    color: 'white',
     fontSize: 30,
     fontFamily: 'Montserrat1',
     padding: 5,
@@ -137,6 +144,8 @@ const textStyles = StyleSheet.create({
     shadowRadius: 2
   },
   state: {
+    textAlign: 'center',
+    color: 'white',
     fontFamily: 'Montserrat2',
     paddingBottom: 20,
     shadowOffset: {
@@ -147,6 +156,8 @@ const textStyles = StyleSheet.create({
     shadowRadius: 2
   },
   feelsLike: {
+    textAlign: 'center',
+    color: 'white',
     paddingBottom: 20,
     fontFamily: 'Montserrat3',
     fontSize: 15,
@@ -161,6 +172,7 @@ const textStyles = StyleSheet.create({
 // Style for my components
 const styles = StyleSheet.create({
   pic: {
+    alignSelf: 'center',
     width: 150,
     height: 150
   },

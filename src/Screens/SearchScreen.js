@@ -86,8 +86,8 @@ export default function SearchScreen({ navigation }) {
             <Text style={textStyles.Country}>
               {result.city.name}, {result.city.country}
             </Text>
-            {/* <Text>{result.city.sunrise}</Text>
-            <Text>{result.city.sunset}</Text> */}
+            <Text>{result.city.sunrise}</Text>
+            <Text>{result.city.sunset}</Text>
             <Text
               style={{
                 fontSize: 22,
@@ -200,7 +200,6 @@ export default function SearchScreen({ navigation }) {
               keyExtractor={(weather) => weather.dt_txt.toString()}
             />
           </View>
-
           <CustomButton
             title="Search"
             onPress={() => {
@@ -220,7 +219,6 @@ export default function SearchScreen({ navigation }) {
 
   function setDbData(text) {
     /**
-     *
      * Need to fix so when user presses he saves another city and not write over the one that already exists
      * when restarting the app
      *
@@ -264,8 +262,6 @@ export default function SearchScreen({ navigation }) {
           `forecast?q=${text}&units=metric&appid=${api_key}`
         )
         setResult(response.data)
-        console.log('forecast log from btn: ', response.data)
-        // console.log(result.list.length, 'result list length')
       } catch (error) {
         setResult(error.toString())
         alert(result)

@@ -27,7 +27,7 @@ export default function ProfileScreen(props) {
 
   return (
     <ImageBackground source={image} resizeMode="cover" style={Styles.image}>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}>
         <Text style={Styles.email}>Email: {auth.currentUser?.email}</Text>
         <CustomButton title="Sign out" onPress={handleSignOut} />
         <CustomButton title="Delete account" onPress={removeAccount} />
@@ -38,10 +38,12 @@ export default function ProfileScreen(props) {
 
 const Styles = StyleSheet.create({
   email: {
+    fontFamily: 'Montserrat3',
     fontSize: 20,
     textAlign: 'center',
     marginTop: 80,
-    margin: 25
+    margin: 25,
+    color: 'white'
   },
   image: {
     flex: 1,
