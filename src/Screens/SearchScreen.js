@@ -43,6 +43,7 @@ export default function SearchScreen({ navigation }) {
       console.error(error)
     })
 
+  // Screens ti display from this file
   if (loaded === true) {
     return (
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
